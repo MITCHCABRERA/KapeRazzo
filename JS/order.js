@@ -4,13 +4,15 @@
   document.addEventListener("DOMContentLoaded", () => {
     console.log("order.js: DOMContentLoaded");
 
+    const API_BASE = "http://localhost:5000";
+
     const cartList = document.getElementById("cartList") || document.getElementById("cartItems");
     const cartTotal = document.getElementById("cartTotal");
     const clearCartBtn = document.getElementById("clearCart") || document.getElementById("clearCartBtn");
     const confirmBtn = document.getElementById("confirmCart") || document.getElementById("checkoutBtn");
     const messageArea = document.getElementById("cartMsg");
 
-    // ✅ Correct confirmed orders section IDs
+    // ✅ Confirmed orders section IDs
     const ordersContainer = document.getElementById("confirmedOrdersList");
     const noOrdersMsg = document.getElementById("noOrdersMsg");
 
@@ -62,6 +64,44 @@
       }, 4000);
     }
 
+    // --- DB helpers ---
+    function getCustomerEmail() {
+      // Use whatever you stored during login (optional)
+      const userEmail =
+        sessionStorage.getItem("userEmail") ||
+        sessionStorage.getItem("loggedInUserEmail") ||
+        sessionStorage.getItem("loggedInUser") || ""; // sometimes user is email
+      return userEmail.includes("@") ? userEmail : "guest@email.com";
+    }
+
+    async function postOrderToDB(orderData) {
+      const payload = {
+        customerName: orderData.name,
+        customerEmail: getCustomerEmail(),
+        items: orderData.items.map((i) => ({
+          productId: i.productId || i._id || undefined,
+          name: i.name,
+          price: Number(i.price),
+          qty: Number(i.qty),
+          size: i.size || "Regular"
+        })),
+        total: Number(orderData.total)
+      };
+
+      const res = await fetch(`${API_BASE}/api/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `HTTP ${res.status}`);
+      }
+
+      return res.json();
+    }
+
     // ✅ Render confirmed orders
     function renderOrders() {
       if (!ordersContainer) return;
@@ -75,42 +115,71 @@
 
       orders.forEach((order, index) => {
         const div = document.createElement("div");
-        div.className = "list-group-item list-group-item-action flex-column align-items-start mb-3 border border-1 rounded p-3 shadow-sm";
+        div.className =
+          "list-group-item list-group-item-action flex-column align-items-start mb-3 border border-1 rounded p-3 shadow-sm";
+
         div.innerHTML = `
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">${escapeHtml(order.name)}</h5>
             <small>${escapeHtml(order.createdAt)}</small>
           </div>
           <p class="mb-1">📞 ${escapeHtml(order.phone)} | 💳 ${escapeHtml(order.method)}</p>
-          <p class="mb-1">Total: ₱${order.total.toFixed(2)}</p>
+          <p class="mb-1">Total: ₱${Number(order.total).toFixed(2)}</p>
           <p class="mb-2">📍 ${escapeHtml(order.address || "N/A")}</p>
+          ${order.dbId ? `<p class="mb-2"><small class="text-muted">DB Order ID: ${escapeHtml(order.dbId)}</small></p>` : ""}
           <ul class="mb-2">
             ${order.items
-              .map(i => `<li>${escapeHtml(i.name)} x${i.qty} — ₱${(i.price * i.qty).toFixed(2)}</li>`)
+              .map((i) => `<li>${escapeHtml(i.name)} x${i.qty} — ₱${(i.price * i.qty).toFixed(2)}</li>`)
               .join("")}
           </ul>
           <button class="btn btn-sm btn-outline-danger cancel-order" data-index="${index}">Cancel Order</button>
         `;
+
         ordersContainer.appendChild(div);
       });
     }
 
-    // ✅ Cancel confirmed order
-    if (ordersContainer) {
-      ordersContainer.addEventListener("click", (e) => {
-        const btn = e.target.closest(".cancel-order");
-        if (!btn) return;
-        const idx = parseInt(btn.dataset.index);
-        if (isNaN(idx)) return;
+   // ✅ Cancel confirmed order (updates MongoDB if dbId exists, then removes locally)
+if (ordersContainer) {
+  ordersContainer.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".cancel-order");
+    if (!btn) return;
 
-        if (confirm("Are you sure you want to cancel this order?")) {
-          orders.splice(idx, 1);
-          saveOrders();
-          renderOrders();
-          showMessage(`<div class="alert alert-danger">❌ Order canceled successfully.</div>`);
+    const idx = parseInt(btn.dataset.index);
+    if (isNaN(idx)) return;
+
+    if (!confirm("Are you sure you want to cancel this order?")) return;
+
+    const order = orders[idx];
+
+    // 1) Update MongoDB status if this order was saved to DB
+    if (order?.dbId) {
+      try {
+        const res = await fetch(`http://localhost:5000/api/orders/${order.dbId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: "cancelled" })
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || `HTTP ${res.status}`);
         }
-      });
+      } catch (err) {
+        console.error("DB cancel failed:", err.message);
+        showMessage(`<div class="alert alert-danger">❌ DB cancel failed: ${escapeHtml(err.message)}</div>`);
+        return; // stop here so UI doesn't remove it if DB failed
+      }
     }
+
+    // 2) Remove from local confirmed list (UI)
+    orders.splice(idx, 1);
+    saveOrders();
+    renderOrders();
+
+    showMessage(`<div class="alert alert-danger">❌ Order canceled successfully.</div>`);
+  });
+}
 
     // ✅ Render cart
     function renderCart() {
@@ -123,13 +192,15 @@
 
       let total = 0;
       cart.forEach((item, index) => {
-        total += item.price * item.quantity;
+        const qty = Number(item.quantity ?? item.qty ?? 1);
+        total += Number(item.price) * qty;
+
         const row = document.createElement("div");
         row.className = "cart-item d-flex justify-content-between align-items-center";
         row.innerHTML = `
-          <div>${escapeHtml(item.name)} x${item.quantity}</div>
+          <div>${escapeHtml(item.name)} x${qty}</div>
           <div>
-            ₱${(item.price * item.quantity).toFixed(2)}
+            ₱${(Number(item.price) * qty).toFixed(2)}
             <button type="button" class="btn btn-sm btn-outline-danger ms-2 remove-btn" data-index="${index}">×</button>
           </div>
         `;
@@ -144,8 +215,10 @@
     cartList.addEventListener("click", (evt) => {
       const btn = evt.target.closest(".remove-btn");
       if (!btn) return;
+
       const index = Number(btn.dataset.index);
       if (!Number.isInteger(index)) return;
+
       cart.splice(index, 1);
       renderCart();
     });
@@ -160,9 +233,9 @@
       });
     }
 
-    // ✅ Confirm order
+    // ✅ Confirm order (now saves to MongoDB too)
     if (confirmBtn) {
-      confirmBtn.addEventListener("click", (e) => {
+      confirmBtn.addEventListener("click", async (e) => {
         e.preventDefault();
 
         if (cart.length === 0) {
@@ -187,7 +260,10 @@
           return;
         }
 
-        const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const totalAmount = cart.reduce(
+          (sum, item) => sum + Number(item.price) * Number(item.quantity ?? item.qty ?? 1),
+          0
+        );
 
         const orderData = {
           name: nameVal,
@@ -196,24 +272,42 @@
           account: accountVal,
           reference: refVal,
           address: addressVal || "N/A",
-          items: cart.map(i => ({ name: i.name, qty: i.quantity, price: i.price })),
+          items: cart.map((i) => ({
+            productId: i._id || i.productId || undefined,
+            name: i.name,
+            qty: Number(i.quantity ?? i.qty ?? 1),
+            price: Number(i.price),
+            size: i.size || "Regular"
+          })),
           total: totalAmount,
           createdAt: new Date().toLocaleString()
         };
 
-        orders.push(orderData);
-        saveOrders();
+        try {
+          const saved = await postOrderToDB(orderData);
 
-        // Clear cart and update both sections
-        cart = [];
-        saveCart();
-        renderCart();
-        renderOrders();
+          // Keep local confirmed orders list for UI
+          orders.push({ ...orderData, dbId: saved._id });
+          saveOrders();
 
-        showMessage(`<div class="alert alert-success">
-          ✅ Order confirmed for <strong>${escapeHtml(nameVal)}</strong>!<br>
-          <small>View it in your confirmed orders list.</small>
-        </div>`);
+          // Clear cart and update UI
+          cart = [];
+          saveCart();
+          renderCart();
+          renderOrders();
+
+          showMessage(`<div class="alert alert-success">
+            ✅ Order saved to database ✅<br>
+            Order ID: <strong>${escapeHtml(saved._id)}</strong><br>
+            <small>Also added to your confirmed orders list.</small>
+          </div>`);
+        } catch (err) {
+          console.error("Order save failed:", err.message);
+          showMessage(`<div class="alert alert-danger">
+            ❌ Failed to save order to database.<br>
+            <small>${escapeHtml(err.message)}</small>
+          </div>`);
+        }
       });
     }
 

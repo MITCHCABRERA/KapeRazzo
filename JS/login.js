@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
 
-  if (!loginForm || !toggleRole || !loginTitle) {
+  if (!loginForm || !toggleRole || !loginTitle || !usernameInput || !passwordInput) {
     console.error("login.js: Missing required elements");
     return;
   }
@@ -21,49 +21,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const adminCred = { username: "admin", password: "admin123" };
   const userCred  = { username: "user",  password: "user123" };
 
-  // Helper to update UI when switching mode
   function updateModeUI() {
     if (isAdmin) {
       loginTitle.textContent = "Admin Login";
       toggleRole.textContent = "Switch to User Login";
-      usernameInput.placeholder = "Username";
-      passwordInput.placeholder = "Password";
-      usernameInput.value = "";
-      passwordInput.value = "";
-      errorMessage.textContent = "";
       toggleRole.setAttribute("aria-pressed","true");
     } else {
       loginTitle.textContent = "User Login";
       toggleRole.textContent = "Login as Admin";
-      usernameInput.placeholder = "Username";
-      passwordInput.placeholder = "Password";
-      usernameInput.value = "";
-      passwordInput.value = "";
-      errorMessage.textContent = "";
       toggleRole.setAttribute("aria-pressed","false");
     }
+
+    usernameInput.value = "";
+    passwordInput.value = "";
+    errorMessage.textContent = "";
   }
 
-  // toggle button
   toggleRole.addEventListener("click", () => {
     isAdmin = !isAdmin;
     updateModeUI();
     console.log("login.js: mode changed. isAdmin =", isAdmin);
   });
 
-  // form submit
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
     errorMessage.textContent = "";
 
     const u = usernameInput.value.trim();
     const p = passwordInput.value.trim();
-    console.log("login.js: submit", {u,p,isAdmin});
 
     if (isAdmin) {
       if (u === adminCred.username && p === adminCred.password) {
-        console.log("login.js: admin success - redirecting to admin.html");
-        sessionStorage.setItem("loggedInUser", "admin"); // save session
+        // ✅ IMPORTANT: admin.html checks "role"
+        sessionStorage.setItem("role", "admin");
+        sessionStorage.setItem("loggedInUser", "admin"); // optional (for your old code)
+
         window.location.href = "admin.html";
         return;
       } else {
@@ -72,8 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else {
       if (u === userCred.username && p === userCred.password) {
-        console.log("login.js: user success - redirecting to site index");
-        sessionStorage.setItem("loggedInUser", "user"); // save session
+        // ✅ Set role for normal users too
+        sessionStorage.setItem("role", "customer");
+        sessionStorage.setItem("loggedInUser", "user"); // optional
+
         window.location.href = "../index.html";
         return;
       } else {
@@ -83,6 +77,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // set initial placeholders
   updateModeUI();
 });

@@ -4,17 +4,18 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>KapeRazzo Coffee House — Admin Panel</title>
+
   <link rel="stylesheet" href="../STYLES/admin_style.css"/>
 
- <!-- Redirect to login if not logged in -->
+  <!-- Simple admin check (replace later with Firebase) -->
   <script>
-    const user = sessionStorage.getItem("loggedInUser");
-    if (user !== "admin") { // only allow admin
+    const role = sessionStorage.getItem("role");
+    if (role !== "admin") {
       window.location.href = "login.html";
     }
   </script>
-
 </head>
+
 <body>
   <header class="admin-header">
     <div class="header-inner">
@@ -31,16 +32,23 @@
     <section>
       <h2 class="section-title">Admin Dashboard</h2>
       <p class="muted">
-        This demo uses <strong>localStorage</strong> to show orders and reservations for your project.
+        Orders and reservations are fetched directly from <strong>MongoDB</strong>.
       </p>
 
       <div class="admin-actions">
-        <button class="btn" id="viewBtn">View Stored Data</button>
+        <button class="btn" id="refreshBtn">Refresh Data</button>
         <button class="btn" id="exportBtn">Export JSON</button>
-        <button class="btn" id="clearBtn">Clear All</button>
       </div>
 
-      <pre id="adminOutput" class="admin-output"></pre>
+      <div id="adminMsg"></div>
+
+      <!-- ORDERS -->
+      <h3 class="admin-subtitle">🧾 Orders</h3>
+      <div id="ordersWrap"></div>
+
+      <!-- RESERVATIONS -->
+      <h3 class="admin-subtitle">📅 Reservations</h3>
+      <div id="reservationsWrap"></div>
     </section>
   </main>
 
@@ -50,8 +58,8 @@
 
   <script src="../JS/admin.js"></script>
   <script>
-    // Redirect to login page when Logout is clicked
     document.getElementById("logoutBtn").addEventListener("click", () => {
+      sessionStorage.clear();
       window.location.href = "login.html";
     });
   </script>
