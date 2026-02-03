@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>KapeRazzo Coffee House — Admin Panel</title>
+
+  <link rel="stylesheet" href="../STYLES/admin_style.css"/>
+
+  <!-- Simple admin check (replace later with Firebase) -->
+  <script>
+    const role = sessionStorage.getItem("role");
+    if (role !== "admin") {
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+
+<body>
+  <header class="admin-header">
+    <div class="header-inner">
+      <img class="admin-logo" src="../PICTURES/KapeRazzo_logo.jpg" alt="KapeRazzo Logo">
+      <div>
+        <h1>KapeRazzo Admin Panel</h1>
+        <p class="tagline">Manage Orders & Reservations</p>
+      </div>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2 class="section-title">Admin Dashboard</h2>
+      <p class="muted">
+        Orders and reservations are fetched directly from <strong>MongoDB</strong>.
+      </p>
+
+      <!-- KPI Cards -->
+      <div id="kpiWrap" class="kpi-wrap">
+        <div class="kpi-card">
+          <div class="kpi-label">Orders Today</div>
+          <div id="kpiOrdersToday" class="kpi-value">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Pending Orders</div>
+          <div id="kpiPending" class="kpi-value">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Reservations Today</div>
+          <div id="kpiResToday" class="kpi-value">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Revenue</div>
+          <div id="kpiRevenue" class="kpi-value">₱0.00</div>
+        </div>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="admin-filters">
+        <input id="adminSearch" class="search-input" placeholder="Search by customer name or email..." />
+
+        <select id="statusFilter" class="filter-select">
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+
+        <select id="timeframeFilter" class="filter-select">
+          <option value="all">All dates</option>
+          <option value="today">Today</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="custom">Custom Date</option>
+        </select>
+
+        <input id="timeCustom" type="date" class="time-custom" style="display:none;" aria-label="Custom date" />
+
+        <div class="admin-actions">
+          <button class="btn" id="refreshBtn">Refresh Data</button>
+          <button class="btn" id="exportBtn">Export JSON</button>
+        </div>
+      </div>
+
+      <div id="adminMsg"></div>
+      <div id="adminToast" class="admin-toast" aria-live="polite"></div>
+
+      <!-- Detail modal -->
+      <div id="detailModal" class="admin-modal" role="dialog" aria-hidden="true">
+        <div class="admin-modal-content">
+          <button class="modal-close" id="modalCloseBtn">&times;</button>
+          <div id="modalBody"></div>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <h3 class="admin-subtitle">🧾 Orders</h3>
+      <div id="ordersWrap"></div>
+
+      <!-- RESERVATIONS -->
+      <h3 class="admin-subtitle">📅 Reservations</h3>
+      <div id="reservationsWrap"></div>
+    </section>
+  </main>
+
+  <footer class="admin-footer">
+    <p>© 2025 KapeRazzo Coffee House | Admin Dashboard</p>
+  </footer>
+
+  <script src="../JS/admin.js"></script>
+  <script>
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      sessionStorage.clear();
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

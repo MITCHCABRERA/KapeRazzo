@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>KapeRazzo Coffee House — Gallery</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../STYLES/styles.css"/>
+  <link rel="stylesheet" href="../STYLES/gallery.css"/>
+</head>
+<body>
+  <header class="site-header fixed-top bg-dark text-light border-top border-3 border-dark">
+    <div class="container header-inner d-flex flex-wrap justify-content-between align-items-center py-3">
+      <a class="brand d-flex align-items-center text-decoration-none" href="index.html">
+        <img class="logo me-3" src="../PICTURES/KapeRazzo_logo.jpg" alt="Company Logo">
+        <div>
+          <h1 class="h4 mb-0 text-light">KapeRazzo Coffee House</h1>
+          <span class="tagline text-light">Warm cups. Cozy vibes.</span>
+        </div>
+      </a>
+      <nav class="main-nav d-flex flex-wrap justify-content-center gap-2" aria-label="Main">
+        <a href="../index.html" class="nav-btn btn btn-outline-dark btn-sm">Home</a>
+        <a href="menu.html" class="nav-btn btn btn-outline-dark btn-sm">Menu</a>
+        <a href="order.html" class="nav-btn btn btn-outline-dark btn-sm">Order</a>
+        <a href="reservation.html" class="nav-btn btn btn-outline-dark btn-sm">Reserve</a>
+        <a href="gallery.html" class="nav-btn btn btn-dark btn-sm active">Gallery</a>
+        <a href="about.html" class="nav-btn btn btn-outline-dark btn-sm">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container my-5">
+    <!-- Carousel: Featured Drinks -->
+    <div id="featuredCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+  <div class="carousel-inner" style="height: 400px;">
+    <div class="carousel-item active">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <img src="../PICTURES/GALLERY/LATTE_ART 6.png" class="d-block" style="height:100%; width:auto; object-fit: cover;" alt="Cappuccino">
+      </div>
+      <div class="carousel-caption d-none d-md-block" style="bottom: 60px;">
+        <h5>Cappuccino</h5>
+        <p>Rich espresso with silky milk foam</p>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <img src="../PICTURES/GALLERY/LATTE_ART 7.png" class="d-block" style="height:100%; width:auto; object-fit: cover;" alt="Matcha Latte">
+      </div>
+      <div class="carousel-caption d-none d-md-block" style="bottom: 60px;">
+        <h5>Matcha Latte</h5>
+        <p>Stone-ground matcha with steamed milk</p>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <img src="../PICTURES/GALLERY/bread_02.png" class="d-block" style="height:100%; width:auto; object-fit: cover;" alt="Butter Croissant">
+      </div>
+      <div class="carousel-caption d-none d-md-block" style="bottom: 60px;">
+        <h5>Butter Croissant</h5>
+        <p>Flaky pastry baked daily</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+    <!-- Gallery Section -->
+    <section>
+      <h2 class="section-title mb-4">Gallery</h2>
+      <div class="row g-3">
+        <div class="col-6 col-md-4">
+          <img src="../PICTURES/GALLERY/LATTE_ART.png" class="img-fluid gallery-img" alt="Latte art" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-img="../PICTURES/GALLERY/LATTE_ART.png">
+        </div>
+        <div class="col-6 col-md-4">
+          <img src="../PICTURES/GALLERY/LATTE_ART 2.png" class="img-fluid gallery-img" alt="Coffee and croissant" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-img="../PICTURES/GALLERY/LATTE_ART 2.png">
+        </div>
+        <div class="col-6 col-md-4">
+          <img src="../PICTURES/GALLERY/LATTE_ART 1.png" class="img-fluid gallery-img" alt="Matcha" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-img="../PICTURES/GALLERY/LATTE_ART 1.png">
+        </div>
+        <div class="col-6 col-md-4">
+          <img src="../PICTURES/GALLERY/LATTE_ART 3.png" class="img-fluid gallery-img" alt="Cafe interior" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-img="../PICTURES/GALLERY/LATTE_ART 3.png">
+        </div>
+        <div class="col-6 col-md-4">
+          <img src="../PICTURES/GALLERY/LATTE_ART 4.png" class="img-fluid gallery-img" alt="Pastry" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-img="../PICTURES/GALLERY/LATTE_ART 4.png">
+        </div>
+        <div class="col-6 col-md-4">
+          <img src="../PICTURES/GALLERY/LATTE_ART 5.png" class="img-fluid gallery-img" alt="Cake slice" data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-img="../PICTURES/GALLERY/LATTE_ART 5.png">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for lightbox -->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-body p-0">
+          <img src="" id="modalImage" class="img-fluid w-100" alt="Gallery Image">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer bg-dark text-light py-3 mt-5">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <div class="footer-left">
+        <strong>KapeRazzo Coffee House</strong>
+        <p class="muted">📍 11 GENERAL TIRONA ST. BRGY 138 BAGONG BARRIO • Mon–Sun 7:00 AM – 9:00 PM</p>
+      </div>
+      <div class="footer-right d-flex align-items-center gap-2">
+        <nav class="small-nav d-flex gap-2">
+          <a href="https://instagram.com" target="_blank"><img class="IG-Logo" src="../PICTURES/HERO/IG_Logo.png" alt="Instagram"></a>
+          <a href="https://www.facebook.com/kaperazzoPH" target="_blank"><img class="FB-Logo" src="../PICTURES/HERO/FB_Logo.png" alt="Facebook"></a>
+        </nav>
+        <p class="muted mb-0">Built for a school project • No payments processed</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom JS -->
+  <script src="../JS/gallery.js"></script>
+</body>
+</html>

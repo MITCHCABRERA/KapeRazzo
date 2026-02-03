@@ -1,0 +1,19 @@
+/* Carousel arrow customization */
+#featuredCarousel .carousel-control-prev-icon,
+#featuredCarousel .carousel-control-next-icon {
+    background-color: black; /* Black arrows */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-size: 100% 100%;
+}
+
+#featuredCarousel .carousel-control-prev-icon::after,
+#featuredCarousel .carousel-control-next-icon::after {
+    display: none; /* remove default chevron */
+}
+
+/* Optional: gallery image cursor pointer */
+.gallery-img {
+    cursor: pointer;
+}

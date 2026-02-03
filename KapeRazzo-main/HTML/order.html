@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KapeRazzo Coffee House — Order</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../STYLES/styles.css" />
+  <link rel="stylesheet" href="../STYLES/order_style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header fixed-top bg-dark text-light border-top border-3 border-dark">
+    <div class="container header-inner d-flex flex-wrap justify-content-between align-items-center py-3">
+      <a class="brand d-flex align-items-center text-decoration-none" href="index.html">
+        <img class="logo me-3" src="../PICTURES/KapeRazzo_logo.jpg" alt="Company Logo">
+        <div>
+          <h1 class="h4 mb-0 text-light">KapeRazzo Coffee House</h1>
+          <span class="tagline text-light">Warm cups. Cozy vibes.</span>
+        </div>
+      </a>
+       <nav class="main-nav d-flex flex-wrap justify-content-center gap-2" aria-label="Main">
+      <a href="../index.html" class="nav-btn btn btn-sm btn-outline-dark">Home</a>
+      <a href="menu.html" class="nav-btn btn btn-sm btn-outline-dark">Menu</a>
+      <a href="order.html" class="nav-btn btn btn-sm btn-dark active">Order</a>
+      <a href="reservation.html" class="nav-btn btn btn-sm btn-outline-dark">Reserve</a>
+      <a href="gallery.html" class="nav-btn btn btn-sm btn-outline-dark">Gallery</a>
+      <a href="about.html" class="nav-btn btn btn-sm btn-outline-dark">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <section class="order mt-4">
+      <h2>Your Order</h2>
+
+      <div class="order-container">
+        <!-- Confirmed Orders Screen -->
+        <div id="confirmedOrdersSection" class="confirmed-orders w-100 pe-4 mt-4">
+          <h4 class="text-secondary fw-semibold">Confirmed Orders</h4>
+          <p class="text-muted">Below are your confirmed orders. You can cancel any if needed.</p>
+          
+          <div id="confirmedOrdersList" class="list-group">
+            <!-- Orders will be displayed here dynamically -->
+          </div>
+
+          <p id="noOrdersMsg" class="text-center text-muted mt-4">No confirmed orders yet.</p>
+        </div>
+
+        <!-- Cart Sidebar -->
+        <aside class="cart">
+          <h3>Your Cart</h3>
+          <div id="cartList" class="cart-list" aria-live="polite"></div>
+
+          <div class="cart-summary d-flex justify-content-between">
+            <strong>Total</strong>
+            <strong id="cartTotal">₱0</strong>
+          </div>
+
+          <hr />
+
+          <div class="checkout">
+            <label for="cartName">Full Name *</label>
+            <input id="cartName" placeholder="Juan Dela Cruz" />
+
+            <label for="cartPhone">Phone *</label>
+            <input id="cartPhone" placeholder="09xx xxx xxxx" />
+
+            <label for="cartMethod">Method *</label>
+            <select id="cartMethod">
+              <option value="Pickup">Pickup</option>
+              <option value="Delivery">Delivery</option>
+            </select> 
+
+            <div id="paymentRequirements">
+              <label for="cartAccount">Account Number *</label>
+              <input id="cartAccount" placeholder="e.g., 09xxxxxxxxx / Bank Account #" />
+
+              <label for="cartRef">Reference Number *</label>
+              <input id="cartRef" placeholder="Enter transaction reference #" />
+            </div>
+
+            <label for="cartAddress">Delivery Address (if Delivery)</label>
+            <input id="cartAddress" placeholder="Street, City" />
+
+            <div id="cartMsg" class="message-area" aria-live="polite"></div>
+            <div class="confirmation-btn mt-3">
+              <button id="confirmCart" class="btn btn-dark">Confirm Order</button>
+              <button id="clearCart" class="btn btn-outline-secondary">Clear Cart</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-left">
+        <strong>KapeRazzo Coffee House</strong>
+        <p class="muted">📍 11 GENERAL TIRONA ST. BRGY 138 BAGONG BARRIO • Mon–Sun 7:00 AM – 9:00 PM</p>
+      </div>
+      <div class="footer-right">
+        <nav class="small-nav">
+          <a href="https://instagram.com" target="_blank"><img class="IG-Logo" src="../PICTURES/HERO/IG_Logo.png" alt="Instagram"></a>
+          <a href="https://www.facebook.com/kaperazzoPH" target="_blank"><img class="FB-Logo" src="../PICTURES/HERO/FB_Logo.png" alt="Facebook"></a>
+        </nav>
+        <p class="muted">Built for a school project • No payments processed</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS + Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- External JS -->
+  <script src="../JS/order.js"></script>
+  <script src="../JS/confirmed_orders.js"></script>
+</body>
+</html>

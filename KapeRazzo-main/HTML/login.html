@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KapeRazzo — Login</title>
+
+  <!-- main styles (optional) -->
+  <link rel="stylesheet" href="../STYLES/styles.css" />
+  <!-- login-specific styles -->
+  <link rel="stylesheet" href="../STYLES/login_style.css" />
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <!-- kept logo (remove if you truly want none) -->
+      <img src="../PICTURES/KapeRazzo_logo.jpg" alt="KapeRazzo Logo" class="logo">
+
+      <h2 id="loginTitle">User Login</h2>
+
+      <form id="loginForm" autocomplete="off">
+        <div class="input-group">
+          <label for="username" id="usernameLabel">Username</label>
+          <input type="text" id="username" name="username" placeholder="Username" required />
+        </div>
+
+        <div class="input-group">
+          <label for="password" id="passwordLabel">Password</label>
+          <input type="password" id="password" name="password" placeholder="Password" required />
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+
+      <button id="toggleRole" class="toggle-btn" aria-pressed="false">Login as Admin</button>
+
+      <p id="errorMessage" class="error" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- login script -->
+  <script src="../JS/login.js"></script>
+</body>
+</html>

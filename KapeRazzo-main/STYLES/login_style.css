@@ -1,0 +1,93 @@
+/* login.css */
+:root {
+  --accent: #6b4226;
+  --accent-dark: #4b2e05;
+  --card-bg: rgba(255,255,255,0.92);
+}
+
+* { box-sizing: border-box; }
+html,body { height: 100%; margin: 0; }
+
+body {
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: url("../PICTURES/HERO/HERO BACKGROUND.png") no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(18,12,8,0.35);
+  z-index: 0;
+}
+
+.login-container { position: relative; z-index: 1; width: 100%; display:flex; justify-content:center; padding: 24px; }
+
+.login-card {
+  width: 360px;
+  background: var(--card-bg);
+  padding: 34px 28px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  text-align: center;
+}
+
+.logo {
+  width: 84px;
+  height: auto;
+  margin-bottom: 12px;
+  border-radius: 50%;
+}
+
+.login-card h2 {
+  margin: 0 0 14px 0;
+  color: var(--accent-dark);
+  font-size: 22px;
+}
+
+.input-group { text-align: left; margin-bottom: 12px; }
+.input-group label { font-weight: 600; color: #3b2a1f; display:block; margin-bottom:6px; font-size:14px; }
+.input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cfc0ad;
+  background: #fffaf5;
+  font-size: 14px;
+}
+
+.input-group input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(107,66,38,0.08); }
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg,var(--accent), #d99a3a);
+  color: #28160d;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.login-btn:hover { transform: translateY(-2px); }
+
+.toggle-btn {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: #5a3b2a;
+  text-decoration: underline;
+  cursor:pointer;
+  font-size: 14px;
+}
+
+.error {
+  margin-top: 12px;
+  color: #b00020;
+  font-size: 13px;
+}
