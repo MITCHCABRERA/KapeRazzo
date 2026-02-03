@@ -12,7 +12,7 @@ const data = [
 
 async function run() {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGODB_URI);
     await Product.deleteMany({});
     await Product.insertMany(data);
     console.log("✅ Seed complete. Inserted:", data.length);
