@@ -1,0 +1,15 @@
+/* transition curves created with https://curveeditor.com/ */
+.tfx-hover-lift-low,
+.tfx-hover-lift-high {
+    transition: all .45s cubic-bezier(0.19,1.00,0.22,1.00);
+}
+
+.tfx-hover-lift-low:hover { /* from STYLES/styles.css->.btn:hover */
+    transition: all .18s cubic-bezier(0.21,1.78,0.46,0.87);
+    transform : translateY(-3px)
+}
+
+.tfx-hover-lift-high:hover { /* from STYLES/styles.css->.card:hover */
+    transition: all .18s cubic-bezier(0.21,1.78,0.46,0.87);
+    transform : translateY(-6px)
+}
