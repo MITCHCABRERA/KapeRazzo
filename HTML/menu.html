@@ -11,26 +11,46 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="../STYLES/styles.css" />
   <link rel="stylesheet" href="../STYLES/menu_style.css" />
+  <link rel="stylesheet" href="../STYLES/transitions.css">
 </head>
 <body>
   <header class="site-header fixed-top bg-dark text-light border-top border-3 border-dark">
-    <div class="container header-inner d-flex flex-wrap justify-content-between align-items-center py-3">
-      <a class="brand d-flex align-items-center text-decoration-none" href="index.html">
-        <img class="logo me-3" src="../PICTURES/KapeRazzo_logo.jpg" alt="Company Logo">
-        <div>
-          <h1 class="h4 mb-0 text-light">KapeRazzo Coffee House</h1>
-          <span class="tagline text-light">Warm cups. Cozy vibes.</span>
+    <nav class="navbar navbar-dark navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+          <img class="logo me-3" src="../PICTURES/KapeRazzo_logo.jpg" alt="Company Logo">
+          <div class="d-none d-sm-block lh-sm">
+              <span class="h5 text-light my-0">KapeRazzo Coffee House</span><br/>
+              <span class="tagline text-light my-0">Warm cups. Cozy vibes.</span>
+          </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item tfx-hover-lift-low">
+              <a href="../index.html" class="nav-link text-white ms-4">Home</a>
+            </li>
+            <li class="nav-item tfx-hover-lift-low">
+              <a href="#" class="nav-link text-white ms-4">Menu</a>
+            </li>
+            <li class="nav-item tfx-hover-lift-low">
+              <a href="order.html" class="nav-link text-white ms-4">Order</a>
+            </li>
+            <li class="nav-item tfx-hover-lift-low">
+              <a href="reservation.html" class="nav-link text-white ms-4">Reserve</a>
+            </li>
+            <li class="nav-item tfx-hover-lift-low">
+              <a href="gallery.html" class="nav-link text-white ms-4">Gallery</a>
+            </li>
+            <li class="nav-item tfx-hover-lift-low">
+              <a href="about.html" class="nav-link text-white ms-4">About</a>
+            </li>
+          </ul>
         </div>
-      </a>
-      <nav class="main-nav d-flex flex-wrap justify-content-center gap-2" aria-label="Main">
-        <a href="../index.html" class="nav-btn btn btn-sm btn-outline-dark">Home</a>
-        <a href="menu.html" class="nav-btn btn btn-sm btn-dark active">Menu</a>
-        <a href="order.html" class="nav-btn btn btn-sm btn-outline-dark">Order</a>
-        <a href="reservation.html" class="nav-btn btn btn-sm btn-outline-dark">Reserve</a>
-        <a href="gallery.html" class="nav-btn btn btn-sm btn-outline-dark">Gallery</a>
-        <a href="about.html" class="nav-btn btn btn-sm btn-outline-dark">About</a>
-      </nav>
-    </div>
+      </div>
+    </nav>
   </header>
 
   <main class="container mt-5 pt-4">
