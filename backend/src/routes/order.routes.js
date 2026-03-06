@@ -1,50 +1,57 @@
 const router = require("express").Router();
 const Order = require("../models/Order");
 
-// ✅ SECURE GET orders
-// - User:  GET /api/orders?uid=xxx  -> only their orders
-// - Admin: GET /api/orders?adminKey=SECRET -> all orders
+
+// -----------------------------------
+// GET all orders (Admin Only via ADMIN_KEY)
+// -----------------------------------
 router.get("/", async (req, res) => {
   try {
-    const { uid, adminKey } = req.query;
 
-    // ✅ Admin access (see all orders)
-    if (adminKey && adminKey === process.env.ADMIN_KEY) {
-      const all = await Order.find().sort({ createdAt: -1 });
-      return res.json(all);
-    }
+    const adminKey = req.query.adminKey;
 
-    // ✅ Otherwise require uid
-    if (!uid) {
-      return res.status(401).json({
-        message: "Unauthorized: provide uid or valid adminKey"
+    if (adminKey !== process.env.ADMIN_KEY) {
+      return res.status(403).json({
+        message: "Access denied: invalid admin key"
       });
     }
 
-    const orders = await Order.find({ uid }).sort({ createdAt: -1 });
+    const orders = await Order.find().sort({ createdAt: -1 });
+
     res.json(orders);
+
   } catch (err) {
+
     res.status(500).json({ message: err.message });
+
   }
 });
 
-// ✅ POST create order (checkout) - requires uid
+
+// -----------------------------------
+// POST create order (Public - Customer checkout)
+// -----------------------------------
 router.post("/", async (req, res) => {
   try {
-    const { uid, customerName, customerEmail, items, total, phone, method, address, payment } = req.body;
 
-    if (!uid) {
-      return res.status(401).json({ message: "Missing uid (login required)" });
-    }
+    const { customerName, customerEmail, items, total, uid } = req.body;
 
     if (!customerName || !customerEmail) {
-      return res.status(400).json({ message: "customerName and customerEmail are required" });
+      return res.status(400).json({
+        message: "customerName and customerEmail are required"
+      });
     }
+
     if (!Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ message: "items must be a non-empty array" });
+      return res.status(400).json({
+        message: "items must be a non-empty array"
+      });
     }
+
     if (total === undefined || Number.isNaN(Number(total))) {
-      return res.status(400).json({ message: "total is required" });
+      return res.status(400).json({
+        message: "total is required"
+      });
     }
 
     const cleanedItems = items.map((i) => ({
@@ -56,103 +63,128 @@ router.post("/", async (req, res) => {
     }));
 
     const order = await Order.create({
-      uid,
+      uid: uid || null,
       customerName,
       customerEmail,
       items: cleanedItems,
       total: Number(total),
-
-      // optional fields (only saved if your schema allows them)
-      phone: phone || "",
-      method: method || "",
-      address: address || "",
-      payment: payment || {}
+      status: "pending"
     });
 
     res.status(201).json(order);
+
   } catch (err) {
+
     res.status(500).json({ message: err.message });
+
   }
 });
 
-// ✅ PATCH update order (status + other fields)
-// requires uid so users can only update their own order
+// -----------------------------------
+// GET single order (Customer status check)
+// -----------------------------------
+router.get("/:id", async (req, res) => {
+  try {
+
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Order not found"
+      });
+    }
+
+    res.json(order);
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: err.message
+    });
+
+  }
+});
+
+// -----------------------------------
+// PATCH update order status (Admin Only)
+// -----------------------------------
 router.patch("/:id", async (req, res) => {
   try {
+
+    const adminKey = req.query.adminKey;
+
+    if (adminKey !== process.env.ADMIN_KEY) {
+      return res.status(403).json({
+        message: "Access denied: invalid admin key"
+      });
+    }
+
     const { id } = req.params;
+    const { status } = req.body;
 
-    const allowedStatus = ["pending", "confirmed", "completed", "cancelled"];
-    const updates = {};
-    const { uid, customerName, customerEmail, items, total, status } = req.body;
+    const allowed = ["pending", "confirmed", "completed", "cancelled"];
 
-    if (!uid) {
-      return res.status(401).json({ message: "Missing uid (login required)" });
+    if (!allowed.includes(status)) {
+      return res.status(400).json({
+        message: "Invalid status value"
+      });
     }
 
-    if (customerName !== undefined) updates.customerName = customerName;
-    if (customerEmail !== undefined) updates.customerEmail = customerEmail;
+    const updated = await Order.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
 
-    if (items !== undefined) {
-      if (!Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({ message: "items must be a non-empty array" });
-      }
-
-      updates.items = items.map((i) => ({
-        productId: i.productId || i._id || undefined,
-        name: i.name,
-        price: Number(i.price),
-        qty: Number(i.qty || 1),
-        size: i.size || "Regular"
-      }));
+    if (!updated) {
+      return res.status(404).json({
+        message: "Order not found"
+      });
     }
-
-    if (total !== undefined) {
-      if (Number.isNaN(Number(total))) {
-        return res.status(400).json({ message: "total must be a number" });
-      }
-      updates.total = Number(total);
-    }
-
-    if (status !== undefined) {
-      if (!allowedStatus.includes(status)) {
-        return res.status(400).json({ message: "Invalid status value" });
-      }
-      updates.status = status;
-    }
-
-    if (Object.keys(updates).length === 0) {
-      return res.status(400).json({ message: "No valid fields provided to update" });
-    }
-
-    const updated = await Order.findOneAndUpdate({ _id: id, uid }, updates, { new: true });
-
-    if (!updated) return res.status(404).json({ message: "Order not found (or not yours)" });
 
     res.json(updated);
+
   } catch (err) {
+
     res.status(500).json({ message: err.message });
+
   }
 });
 
-// ✅ DELETE remove order permanently
-// requires uid so users can only delete their own
+
+// -----------------------------------
+// DELETE remove order (Admin Only)
+// -----------------------------------
 router.delete("/:id", async (req, res) => {
   try {
+
+    const adminKey = req.query.adminKey;
+
+    if (adminKey !== process.env.ADMIN_KEY) {
+      return res.status(403).json({
+        message: "Access denied: invalid admin key"
+      });
+    }
+
     const { id } = req.params;
-    const { uid } = req.body;
 
-    if (!uid) {
-      return res.status(401).json({ message: "Missing uid (login required)" });
-    }
+    const deleted = await Order.findByIdAndDelete(id);
 
-    const deleted = await Order.findOneAndDelete({ _id: id, uid });
     if (!deleted) {
-      return res.status(404).json({ message: "Order not found (or not yours)" });
+      return res.status(404).json({
+        message: "Order not found"
+      });
     }
 
-    res.json({ message: "Order deleted ✅", id });
+    res.json({
+      message: "Order deleted ✅",
+      id
+    });
+
   } catch (err) {
+
     res.status(500).json({ message: err.message });
+
   }
 });
 
