@@ -1,0 +1,102 @@
+.order {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+/* Cart Section */
+.cart {
+    width: 400px;
+}
+
+/* Scrollable cart list */
+#cartList {
+    max-height: 250px; 
+    overflow-y: auto;
+    margin-top: 10px;
+    padding-right: 8px;
+    scrollbar-width: thin;
+}
+
+#cartList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#cartList::-webkit-scrollbar-track {
+    background: rgb(46, 46, 46);
+    border-radius: 10px;
+}
+
+#cartList::-webkit-scrollbar-thumb {
+    background-color: aliceblue;
+    border-radius: 10px;
+}
+
+#cartList::-webkit-scrollbar-thumb:hover {
+    background-color: #cfdfff;
+}
+
+/* Order Total & Buttons */
+.order-total {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.confirmation-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Confirmed Orders Section */
+.confirmed-orders {
+    background-color: #fff; /* or transparent if you prefer no box */
+    color: #000;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 700px;
+    margin-top: 30px;
+}
+
+
+.confirmed-orders h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Payment Requirements */
+#paymentRequirements {
+    margin-top: 12px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 900px) {
+    .order {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .cart,
+    .confirmed-orders {
+        width: 90%;
+    }
+
+    #cartList {
+        max-height: 200px;
+    }
+}

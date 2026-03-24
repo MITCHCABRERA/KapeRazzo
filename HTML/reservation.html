@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>KapeRazzo Coffee House — Reservation</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../STYLES/styles.css"/>
+</head>
+<body>
+  <header class="site-header fixed-top bg-dark text-light border-top border-3 border-dark">
+    <div class="container header-inner d-flex flex-wrap justify-content-between align-items-center py-3">
+      <a class="brand d-flex align-items-center text-decoration-none" href="index.html">
+        <img class="logo me-3" src="../PICTURES/KapeRazzo_logo.jpg" alt="Company Logo">
+        <div>
+          <h1 class="h4 mb-0 text-light">KapeRazzo Coffee House</h1>
+          <span class="tagline text-light">Warm cups. Cozy vibes.</span>
+        </div>
+      </a>
+       <nav class="main-nav d-flex flex-wrap justify-content-center gap-2" aria-label="Main">
+      <a href="../index.html" class="nav-btn btn btn-sm btn-outline-dark">Home</a>
+      <a href="menu.html" class="nav-btn btn btn-sm btn-outline-dark">Menu</a>
+      <a href="order.html" class="nav-btn btn btn-sm btn-outline-dark">Order</a>
+      <a href="reservation.html" class="nav-btn btn btn-sm btn-dark active">Reserve</a>
+      <a href="gallery.html" class="nav-btn btn btn-sm btn-outline-dark">Gallery</a>
+      <a href="about.html" class="nav-btn btn btn-sm btn-outline-dark">About</a>
+      <a href="profile.html" class="nav-btn btn btn-sm btn-outline-dark">Profile</a>
+      </nav>
+    <div class="user-actions">
+    <div id="userProfile" class="user-profile">
+      <img id="userPhoto" class="user-photo" src="" alt="Profile" />
+      <div class="user-meta">
+        <div id="userName" class="user-name">User</div>
+        <div id="userEmail" class="user-email">email@email.com</div>
+      </div>
+    </div>
+
+    <button id="logoutBtn" class="btn btn-sm btn-outline-light">
+      Logout
+    </button>
+  </div>
+
+    </div>
+  </header>
+
+  <main class="container my-5">
+    <h2 class="section-title mb-4">Reserve a Table</h2>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form id="resForm">
+          <div class="mb-3">
+            <label for="rname" class="form-label">Full Name *</label>
+            <input id="rname" class="form-control" placeholder="Enter your full name"/>
+          </div>
+
+          <div class="mb-3">
+            <label for="rphone" class="form-label">Phone *</label>
+            <input id="rphone" class="form-control" placeholder="09xx xxx xxxx"/>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label for="rdate" class="form-label">Date *</label>
+              <input id="rdate" type="date" class="form-control"/>
+            </div>
+            <div class="col-md-6">
+              <label for="rtime" class="form-label">Time Slot *</label>
+              <select id="rtime" class="form-select">
+                <option value="">Select...</option>
+                <option>08:00</option>
+                <option>10:00</option>
+                <option>12:00</option>
+                <option>14:00</option>
+                <option>16:00</option>
+                <option>18:00</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="party" class="form-label">Party Size *</label>
+            <select id="party" class="form-select">
+              <option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option>6</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="requests" class="form-label">Special Requests</label>
+            <input id="requests" class="form-control" placeholder="Near window, birthday, etc." />
+          </div>
+
+          <div id="resMsg" class="message-area mb-3 text-success" aria-live="polite"></div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Reserve</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <section class="card shadow-sm mt-4">
+      <div class="card-body">
+        <h3 class="mb-3">My Reservations</h3>
+        <div id="myReservationsList"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap">
+      <div class="footer-left">
+        <strong>KapeRazzo Coffee House</strong>
+        <p class="muted">📍 11 GENERAL TIRONA ST. BRGY 138 BAGONG BARRIO • Mon–Sun 7:00 AM – 9:00 PM</p>
+      </div>
+      <div class="footer-right">
+        <nav class="small-nav">
+          <a href="https://instagram.com" target="_blank"><img class="IG-Logo" src="../PICTURES/HERO/IG_Logo.png" alt="Instagram"></a>
+          <a href="https://www.facebook.com/kaperazzoPH" target="_blank"><img class="FB-Logo" src="../PICTURES/HERO/FB_Logo.png" alt="Facebook"></a>
+        </nav>
+        <p class="muted">Built for a school project • No payments processed</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS + Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- External JS -->
+  <script type="module" src="../JS/reservation.js"></script>
+  <script type="module" src="../JS/logout.js"></script>
+  <script type="module" src="../JS/profile.js"></script>
+</body>
+</html>

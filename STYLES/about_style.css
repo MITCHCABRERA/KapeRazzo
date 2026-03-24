@@ -1,0 +1,38 @@
+.about-location{
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+
+.location-address{
+    min-width: 300px;
+
+}
+
+.map-wrap{
+    flex: 1;
+}
+
+.map{
+    width: 700px;
+    height: 400px;
+   
+}
+
+
+@media (max-width: 800px) {
+    .about-location{
+        flex-direction: column;
+    }
+    .location-address{
+        width: 400px;
+    }
+
+    .map{
+        width: 500px;
+        height: 400px;
+    }
+
+    
+}

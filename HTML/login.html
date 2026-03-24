@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KapeRazzo — Login</title>
+
+  <link rel="stylesheet" href="../STYLES/styles.css" />
+  <link rel="stylesheet" href="../STYLES/login_style.css" />
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <img src="../PICTURES/KapeRazzo_logo.jpg" alt="KapeRazzo Logo" class="logo">
+
+      <h2 id="loginTitle">Customer Login</h2>
+      <p id="authModeHint" class="login-helper">Login with email/password or continue with Google.</p>
+
+      <div class="role-tabs" aria-label="Choose account type">
+        <button type="button" id="customerRoleBtn" class="role-tab active" aria-pressed="true">Customer</button>
+        <button type="button" id="adminRoleBtn" class="role-tab" aria-pressed="false">Admin</button>
+      </div>
+
+      <form id="loginForm" autocomplete="off">
+        <div class="input-group">
+          <label for="username" id="usernameLabel">Email</label>
+          <input type="email" id="username" name="username" placeholder="Email address" required />
+        </div>
+
+        <div class="input-group">
+          <label for="password" id="passwordLabel">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="6" />
+        </div>
+
+        <button type="submit" id="passwordAuthBtn" class="login-btn">Login with Password</button>
+      </form>
+
+      <div class="auth-actions-stack">
+        <button type="button" id="toggleAuthMode" class="secondary-btn">
+          Create password account
+        </button>
+
+        <button type="button" id="forgotPasswordBtn" class="link-btn">
+          Forgot password? Send reset email
+        </button>
+
+        <button type="button" id="resendVerificationBtn" class="link-btn">
+          Resend verification email
+        </button>
+      </div>
+
+      <div class="login-divider"><span>or</span></div>
+
+      <button type="button" id="googleLoginBtn" class="google-btn">
+        Continue with Google
+      </button>
+
+      <p id="roleHint" class="role-hint"></p>
+      <p id="errorMessage" class="error" aria-live="polite"></p>
+
+      <div class="api-settings">
+        <div class="api-settings-actions">
+          <button type="button" id="configureApiBaseBtn" class="secondary-btn api-btn">Backend Settings</button>
+          <button type="button" id="testApiBaseBtn" class="secondary-btn api-btn">Test Backend</button>
+        </div>
+        <p id="apiBaseStatus" class="api-status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../JS/login.js"></script>
+</body>
+</html>

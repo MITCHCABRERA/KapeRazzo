@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KapeRazzo — Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../STYLES/styles.css" />
+  <link rel="stylesheet" href="../STYLES/profile_style.css" />
+</head>
+<body>
+  <header class="site-header fixed-top bg-dark text-light border-top border-3 border-dark">
+    <div class="container header-inner d-flex flex-wrap justify-content-between align-items-center py-3">
+      <a class="brand d-flex align-items-center text-decoration-none" href="../index.html">
+        <img class="logo me-3" src="../PICTURES/KapeRazzo_logo.jpg" alt="Company Logo">
+        <div>
+          <h1 class="h4 mb-0 text-light">KapeRazzo Coffee House</h1>
+          <span class="tagline text-light">Warm cups. Cozy vibes.</span>
+        </div>
+      </a>
+      <nav class="main-nav d-flex flex-wrap justify-content-center gap-2" aria-label="Main">
+        <a href="../index.html" class="nav-btn btn btn-sm btn-outline-dark">Home</a>
+        <a href="menu.html" class="nav-btn btn btn-sm btn-outline-dark">Menu</a>
+        <a href="order.html" class="nav-btn btn btn-sm btn-outline-dark">Order</a>
+        <a href="reservation.html" class="nav-btn btn btn-sm btn-outline-dark">Reserve</a>
+        <a href="profile.html" class="nav-btn btn btn-sm btn-dark active">Profile</a>
+      </nav>
+      <div class="user-actions">
+        <div id="userProfile" class="user-profile">
+          <img id="userPhoto" class="user-photo" src="" alt="Profile" />
+          <div class="user-meta">
+            <div id="userName" class="user-name">User</div>
+            <div id="userEmail" class="user-email">email@email.com</div>
+          </div>
+        </div>
+        <button id="logoutBtn" class="btn btn-sm btn-outline-light">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container profile-page">
+    <div class="profile-card card shadow-sm">
+      <div class="card-body">
+        <h2 class="mb-3">Edit Profile</h2>
+        <p class="text-muted">Update your display name, photo URL, and password. Email verification is required for orders and reservations.</p>
+        <div id="profileMsg"></div>
+        <form id="profileForm">
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input id="profileEmail" class="form-control" readonly />
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Display name</label>
+              <input id="profileDisplayName" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Photo URL</label>
+              <input id="profilePhotoURL" class="form-control" placeholder="https://..." />
+            </div>
+          </div>
+          <div class="row g-3 mt-1">
+            <div class="col-md-6"><label class="form-label">Role</label><div id="profileRole" class="form-control bg-light">customer</div></div>
+            <div class="col-md-6"><label class="form-label">Email status</label><div id="profileVerified" class="form-control bg-light">not verified</div></div>
+          </div>
+          <hr>
+          <h5>Change Password</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Current password</label>
+              <input id="currentPassword" type="password" class="form-control" placeholder="Required to change password" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">New password</label>
+              <input id="newPassword" type="password" class="form-control" minlength="6" placeholder="Leave blank to keep current password" />
+            </div>
+          </div>
+          <button class="btn btn-dark mt-4" type="submit">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="../JS/profile-page.js"></script>
+  <script type="module" src="../JS/logout.js"></script>
+  <script type="module" src="../JS/profile.js"></script>
+</body>
+</html>
