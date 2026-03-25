@@ -17,11 +17,11 @@
   border-color: #fff;
   transition: all 0.3s ease;
 
-  /* positioning to the far right corner */
+  /* positioning to the far right corner
   position: absolute;
   top: 50%;
   right: 20px;
-  transform: translateY(-50%);
+  transform: translateY(-50%); */
 }
 
 #logoutBtn:hover {
