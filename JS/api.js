@@ -26,7 +26,26 @@ function normalizeBase(url) {
 }
 
 function getConfiguredApiBase() {
-  return normalizeBase(window.KAPERAZZO_API_BASE || localStorage.getItem(API_BASE_STORAGE_KEY) || "");
+  const configured = normalizeBase(window.KAPERAZZO_API_BASE || localStorage.getItem(API_BASE_STORAGE_KEY) || "");
+  if (!configured) return "";
+
+  try {
+    const url = new URL(configured);
+    const isLocalPage = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
+    const isConfiguredLocal = url.hostname === "127.0.0.1" || url.hostname === "localhost";
+
+    if (!isLocalPage && isConfiguredLocal) {
+      return "";
+    }
+
+    if (!isLocalPage && url.hostname === window.location.hostname && url.port === "5000") {
+      return "";
+    }
+  } catch {
+    return "";
+  }
+
+  return configured;
 }
 
 function getDefaultApiBase() {
@@ -44,26 +63,22 @@ function getCandidateApiBases() {
   const bases = [];
   const configured = getConfiguredApiBase();
   const active = normalizeBase(sessionStorage.getItem(API_BASE_ACTIVE_KEY) || "");
-  const { protocol, hostname, port } = window.location;
+  const { protocol, hostname } = window.location;
   const defaultBase = getDefaultApiBase();
+  const isLocal = hostname === "127.0.0.1" || hostname === "localhost";
 
   [configured, active, defaultBase].filter(Boolean).forEach((candidate) => {
     if (!bases.includes(candidate)) bases.push(candidate);
   });
 
-  if (hostname) {
+  if (isLocal && hostname) {
     const hostPort5000 = `${protocol}//${hostname}:5000`;
     if (!bases.includes(hostPort5000)) bases.push(hostPort5000);
-  }
 
-  if (port && port !== "5000") {
-    const swappedPort = `${protocol}//${hostname}:5000`;
-    if (!bases.includes(swappedPort)) bases.push(swappedPort);
+    ["http://127.0.0.1:5000", "http://localhost:5000"].forEach((candidate) => {
+      if (!bases.includes(candidate)) bases.push(candidate);
+    });
   }
-
-  ["http://127.0.0.1:5000", "http://localhost:5000"].forEach((candidate) => {
-    if (!bases.includes(candidate)) bases.push(candidate);
-  });
 
   return bases.filter(Boolean);
 }
@@ -172,8 +187,12 @@ async function discoverApiBase(force = false) {
       }
     }
 
+    const hint = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+      ? "Start the backend, then try again. If the backend is on another machine, set its URL in Backend Settings."
+      : "Please try again. If this keeps happening, open Backend Settings and confirm the live API URL.";
+
     throw createAppError(
-      `Cannot reach backend server. Tried: ${candidates.join(", ")}. Start the backend, then try again. If deployed as a single service, make sure the backend is serving the frontend and API from the same domain. If the backend is on another machine, set its URL in Backend Settings.`,
+      `Cannot reach backend server. Tried: ${candidates.join(", ")}. ${hint}`,
       { code: "BACKEND_UNREACHABLE", attemptedBases: candidates }
     );
   })();
@@ -253,8 +272,12 @@ async function apiFetch(path, options = {}) {
     }
   }
 
+  const hint = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+    ? "Start the backend, then try again."
+    : "Please try again. If this keeps happening, open Backend Settings and confirm the live API URL.";
+
   throw createAppError(
-    `Cannot reach backend server. Tried: ${attemptedBases.join(", ")}. Start the backend, then try again.`,
+    `Cannot reach backend server. Tried: ${attemptedBases.join(", ")}. ${hint}`,
     { code: "BACKEND_UNREACHABLE", attemptedBases, cause: lastNetworkError || null }
   );
 }
