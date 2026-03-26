@@ -1,7 +1,25 @@
 import { auth } from "./firebaseConfig.js";
+import {
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 const API_BASE_STORAGE_KEY = "KAPERAZZO_API_BASE";
 const API_BASE_ACTIVE_KEY = "KAPERAZZO_API_BASE_ACTIVE";
+
+const AUTH_SESSION_KEYS = [
+  "idToken",
+  "uid",
+  "email",
+  "userEmail",
+  "loggedInUser",
+  "displayName",
+  "photoURL",
+  "isLoggedIn",
+  "role",
+  "emailVerified"
+];
 
 function normalizeBase(url) {
   return String(url || "").trim().replace(/\/$/, "");
@@ -63,6 +81,14 @@ function createAppError(message, extras = {}) {
 let API_BASE = resolveApiBase();
 let discoveryPromise = null;
 
+const persistenceReady = setPersistence(auth, browserLocalPersistence).catch(() => null);
+const authReadyPromise = new Promise((resolve) => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    unsubscribe();
+    resolve(user || null);
+  }, () => resolve(null));
+});
+
 function saveApiBase(url) {
   const normalized = normalizeBase(url);
   if (!normalized) return "";
@@ -76,6 +102,38 @@ function clearSavedApiBase() {
   localStorage.removeItem(API_BASE_STORAGE_KEY);
   sessionStorage.removeItem(API_BASE_ACTIVE_KEY);
   API_BASE = resolveApiBase();
+}
+
+function clearAuthSession() {
+  AUTH_SESSION_KEYS.forEach((key) => sessionStorage.removeItem(key));
+}
+
+function syncSessionFromUser(user, extras = {}) {
+  if (!user) {
+    clearAuthSession();
+    return;
+  }
+
+  sessionStorage.setItem("uid", user.uid || "");
+  sessionStorage.setItem("isLoggedIn", "true");
+  if (user.email) {
+    sessionStorage.setItem("email", user.email);
+    sessionStorage.setItem("userEmail", user.email);
+    sessionStorage.setItem("loggedInUser", user.email);
+  }
+  if (user.displayName) sessionStorage.setItem("displayName", user.displayName);
+  if (user.photoURL) sessionStorage.setItem("photoURL", user.photoURL);
+  sessionStorage.setItem("emailVerified", String(Boolean(user.emailVerified)));
+
+  Object.entries(extras || {}).forEach(([key, value]) => {
+    if (value === undefined || value === null) return;
+    sessionStorage.setItem(key, String(value));
+  });
+}
+
+async function ensureAuthReady() {
+  await persistenceReady;
+  return auth.currentUser || authReadyPromise;
 }
 
 async function probeApiBase(base, timeoutMs = 1800) {
@@ -128,20 +186,25 @@ async function discoverApiBase(force = false) {
 }
 
 async function getAuthToken(forceRefresh = false) {
-  const user = auth.currentUser;
-  if (!user) return sessionStorage.getItem("idToken") || "";
+  let user = auth.currentUser;
+
+  if (!user) {
+    user = await ensureAuthReady();
+  }
+
+  if (!user) {
+    clearAuthSession();
+    return "";
+  }
 
   const token = await user.getIdToken(forceRefresh);
   sessionStorage.setItem("idToken", token);
-  sessionStorage.setItem("uid", user.uid || "");
-  if (user.email) {
-    sessionStorage.setItem("email", user.email);
-    sessionStorage.setItem("userEmail", user.email);
-  }
-  if (user.displayName) sessionStorage.setItem("displayName", user.displayName);
-  if (user.photoURL) sessionStorage.setItem("photoURL", user.photoURL);
-  sessionStorage.setItem("isLoggedIn", "true");
+  syncSessionFromUser(user);
   return token;
+}
+
+async function doFetch(base, path, options, headers) {
+  return fetch(`${base}${path}`, { ...options, headers });
 }
 
 async function apiFetch(path, options = {}) {
@@ -159,13 +222,31 @@ async function apiFetch(path, options = {}) {
   for (const base of retryBases) {
     try {
       attemptedBases.push(base);
-      const response = await fetch(`${base}${path}`, { ...options, headers });
+      let response = await doFetch(base, path, options, headers);
+
+      if (response.status === 401 && auth.currentUser && !options._retriedAfter401) {
+        try {
+          const refreshedToken = await getAuthToken(true);
+          if (refreshedToken) {
+            const retryHeaders = new Headers(headers);
+            retryHeaders.set("Authorization", `Bearer ${refreshedToken}`);
+            response = await doFetch(base, path, { ...options, _retriedAfter401: true }, retryHeaders);
+          }
+        } catch {
+          // fall through to original 401 handling
+        }
+      }
+
       API_BASE = base;
       sessionStorage.setItem(API_BASE_ACTIVE_KEY, base);
       if (normalizeBase(localStorage.getItem(API_BASE_STORAGE_KEY) || "") !== base) {
         localStorage.setItem(API_BASE_STORAGE_KEY, base);
       }
-      if (response.status === 401) sessionStorage.clear();
+
+      if (response.status === 401 && !auth.currentUser) {
+        clearAuthSession();
+      }
+
       return response;
     } catch (error) {
       lastNetworkError = error;
@@ -205,14 +286,17 @@ async function fetchJSON(path, options = {}) {
 export {
   API_BASE,
   API_BASE_STORAGE_KEY,
+  clearAuthSession,
   clearSavedApiBase,
   createAppError,
   discoverApiBase,
+  ensureAuthReady,
   fetchJSON,
   getAuthToken,
   getCandidateApiBases,
   normalizeBase,
   apiFetch,
   resolveApiBase,
-  saveApiBase
+  saveApiBase,
+  syncSessionFromUser
 };

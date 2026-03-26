@@ -4,7 +4,7 @@ import { fetchJSON } from "./api.js";
 import { getFriendlyErrorMessage } from "./error-handler.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const CURRENT_UID = sessionStorage.getItem("uid") || "";
+  const currentUid = () => auth.currentUser?.uid || sessionStorage.getItem("uid") || "";
 
   const output = document.getElementById("adminMsg");
   const ordersWrap = document.getElementById("ordersWrap");
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </thead>
           <tbody>
             ${users.map((user) => {
-              const canManage = user.uid !== CURRENT_UID;
+              const canManage = user.uid !== currentUid();
               return `
                 <tr>
                   <td>${escapeHtml(user.displayName || "—")}</td>

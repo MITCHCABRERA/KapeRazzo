@@ -1,4 +1,4 @@
-import { fetchJSON } from "./api.js";
+import { ensureAuthReady, fetchJSON } from "./api.js";
 import { getFriendlyErrorMessage } from "./error-handler.js";
 
 function escapeHtml(str) {
@@ -39,10 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
 
-  function requireUid() {
-    const uid = sessionStorage.getItem("uid");
+  async function requireUid() {
+    const user = await ensureAuthReady();
+    const uid = user?.uid || sessionStorage.getItem("uid");
     if (!uid) {
-      alert("Please login and verify your email first.");
+      alert("Please log in first.");
       window.location.href = "login.html";
       throw new Error("No uid");
     }
@@ -158,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!btn) return;
     if (!confirm("Cancel this order?")) return;
     try {
-      requireUid();
+      await requireUid();
       const updated = await cancelOrderInDB(btn.dataset.id);
       orders = orders.map((order) => order._id === updated._id ? updated : order);
       renderOrders();
@@ -178,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
   confirmBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
     try {
-      requireUid();
+      await requireUid();
     } catch {
       return;
     }

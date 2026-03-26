@@ -13,8 +13,8 @@ const defaultFirebaseMessages = {
 };
 
 const defaultApiMessages = {
-  AUTH_TOKEN_MISSING: "Your session is missing. Please log in again.",
-  AUTH_INVALID_TOKEN: "Your session expired. Please log in again.",
+  AUTH_TOKEN_MISSING: "We couldn't restore your session yet. Please wait a moment and try again.",
+  AUTH_INVALID_TOKEN: "We couldn't verify your session. Please try again. If this keeps happening, log in again.",
   EMAIL_NOT_VERIFIED: "Please verify your email address before continuing.",
   BACKEND_UNREACHABLE: "Cannot reach backend server. Please try again in a moment.",
   VALIDATION_ERROR: "Please review the form fields and try again.",

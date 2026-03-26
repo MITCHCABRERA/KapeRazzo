@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-guard="admin">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -7,12 +7,7 @@
 
   <link rel="stylesheet" href="../STYLES/admin_style.css"/>
 
-  <script>
-    const role = sessionStorage.getItem("role");
-    if (role !== "admin") {
-      window.location.href = "login.html";
-    }
-  </script>
+  <script type="module" src="../JS/page-guard.js"></script>
 </head>
 
 <body>
@@ -128,7 +123,6 @@
   </footer>
 
   <script type="module" src="../JS/admin.js"></script>
-  <script src="../JS/admin-guard.js"></script>
   <script type="module" src="../JS/logout.js"></script>
   <script src="../JS/profile.js"></script>
 </body>

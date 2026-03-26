@@ -1,4 +1,4 @@
-import { fetchJSON } from "./api.js";
+import { ensureAuthReady, fetchJSON } from "./api.js";
 import { getFriendlyErrorMessage } from "./error-handler.js";
 
 function escapeHtml(str) {
@@ -27,10 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
     resMsg.innerHTML = `<div class="alert alert-${type}" role="alert">${text}</div>`;
   }
 
-  function requireUid() {
-    const uid = sessionStorage.getItem("uid");
+  async function requireUid() {
+    const user = await ensureAuthReady();
+    const uid = user?.uid || sessionStorage.getItem("uid");
     if (!uid) {
-      alert("Please login and verify your email first.");
+      alert("Please log in first.");
       window.location.href = "login.html";
       throw new Error("No uid");
     }
@@ -91,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
   resForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
-      requireUid();
+      await requireUid();
     } catch {
       return;
     }
