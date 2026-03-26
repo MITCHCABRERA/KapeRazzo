@@ -1,11 +1,10 @@
 import { auth } from "./firebaseConfig.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-function getLoginUrl() {
-  const path = window.location.pathname || "";
-  return path.endsWith("/index.html") || path === "/index.html"
-    ? "HTML/login.html"
-    : "login.html";
+function clearClientSession() {
+  sessionStorage.clear();
+  localStorage.removeItem("KAPERAZZO_API_BASE");
+  sessionStorage.removeItem("KAPERAZZO_API_BASE_ACTIVE");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,8 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn("Firebase sign out skipped:", err);
     }
 
-    sessionStorage.clear();
-    alert("You have been logged out successfully!");
-    window.location.href = getLoginUrl();
+    clearClientSession();
+    window.location.replace("/login.html");
   });
 });

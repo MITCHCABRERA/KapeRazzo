@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const role = sessionStorage.getItem("role");
 
   if (!uid || role !== "admin") {
-    alert("Admins only.");
-    window.location.replace("../index.html");
+    window.location.replace("/login.html?next=/admin.html");
   }
 });

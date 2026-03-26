@@ -78,22 +78,36 @@ app.use("/PICTURES", express.static(path.join(frontendRoot, "PICTURES"), { maxAg
 app.use("/favicon.ico", express.static(path.join(frontendRoot, "favicon.ico")));
 
 app.get("/", (req, res) => {
+  res.redirect(302, "/login.html");
+});
+
+app.get("/index.html", (req, res) => {
   res.sendFile(path.join(frontendRoot, "index.html"));
 });
 
-app.get(["/login", "/profile", "/orders", "/reservations", "/admin", "/about", "/gallery", "/menu"], (req, res) => {
-  const routeMap = {
-    "/login": "login.html",
-    "/profile": "profile.html",
-    "/orders": "order.html",
-    "/reservations": "reservation.html",
-    "/admin": "admin.html",
-    "/about": "about.html",
-    "/gallery": "gallery.html",
-    "/menu": "menu.html"
-  };
+const pageRouteMap = {
+  "/login": "login.html",
+  "/login.html": "login.html",
+  "/profile": "profile.html",
+  "/profile.html": "profile.html",
+  "/orders": "order.html",
+  "/order": "order.html",
+  "/order.html": "order.html",
+  "/reservations": "reservation.html",
+  "/reservation": "reservation.html",
+  "/reservation.html": "reservation.html",
+  "/admin": "admin.html",
+  "/admin.html": "admin.html",
+  "/about": "about.html",
+  "/about.html": "about.html",
+  "/gallery": "gallery.html",
+  "/gallery.html": "gallery.html",
+  "/menu": "menu.html",
+  "/menu.html": "menu.html"
+};
 
-  res.sendFile(path.join(frontendRoot, "HTML", routeMap[req.path]));
+app.get(Object.keys(pageRouteMap), (req, res) => {
+  res.sendFile(path.join(frontendRoot, "HTML", pageRouteMap[req.path]));
 });
 
 app.get("/api/health", (req, res) => {

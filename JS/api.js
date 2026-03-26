@@ -300,3 +300,8 @@ export {
   saveApiBase,
   syncSessionFromUser
 };
+
+
+export function clearSessionCache() {
+  sessionStorage.clear();
+}

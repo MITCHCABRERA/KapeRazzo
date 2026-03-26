@@ -1,11 +1,17 @@
-import { auth } from "./firebaseConfig.js";
-import { ensureAuthReady, fetchJSON, syncSessionFromUser } from "./api.js";
+import { ensureAuthReady, fetchJSON, syncSessionFromUser, clearSessionCache } from "./api.js";
 
-function getLoginUrl() {
-  const path = window.location.pathname || "";
-  return path.endsWith("/index.html") || path === "/index.html"
-    ? "HTML/login.html"
-    : "login.html";
+function loginUrlWithNext() {
+  const current = `${window.location.pathname || "/"}${window.location.search || ""}${window.location.hash || ""}`;
+  const params = new URLSearchParams();
+  if (current && current !== "/login.html" && current !== "/HTML/login.html") {
+    params.set("next", current);
+  }
+  const suffix = params.toString() ? `?${params.toString()}` : "";
+  return `/login.html${suffix}`;
+}
+
+function homeUrl() {
+  return "/index.html";
 }
 
 async function runGuard() {
@@ -13,35 +19,35 @@ async function runGuard() {
   const user = await ensureAuthReady();
 
   if (!user) {
-    window.location.replace(getLoginUrl());
+    clearSessionCache();
+    window.location.replace(loginUrlWithNext());
     return;
   }
 
   syncSessionFromUser(user);
 
   try {
-    const profile = await fetchJSON("/api/auth/me", { skipDiscovery: false });
+    const profile = await fetchJSON("/api/auth/me", { skipDiscovery: false, suppressExpiredRedirect: true });
     syncSessionFromUser(user, {
       role: profile?.isAdmin ? "admin" : "customer",
       emailVerified: Boolean(profile?.emailVerified)
     });
 
     if (mode === "admin" && !profile?.isAdmin) {
-      window.location.replace(pathToHome());
+      window.location.replace(homeUrl());
       return;
     }
   } catch (error) {
+    if (error?.status === 401) {
+      clearSessionCache();
+      window.location.replace(loginUrlWithNext());
+      return;
+    }
+
     if (mode === "admin") {
-      window.location.replace(pathToHome());
+      window.location.replace(homeUrl());
     }
   }
-}
-
-function pathToHome() {
-  const path = window.location.pathname || "";
-  return path.endsWith("/index.html") || path === "/index.html"
-    ? "index.html"
-    : "../index.html";
 }
 
 runGuard();

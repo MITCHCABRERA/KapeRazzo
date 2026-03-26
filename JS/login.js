@@ -8,7 +8,7 @@ import {
   signOut,
   sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { API_BASE, discoverApiBase, fetchJSON, normalizeBase, saveApiBase } from "./api.js";
+import { API_BASE, discoverApiBase, ensureAuthReady, fetchJSON, normalizeBase, saveApiBase } from "./api.js";
 import { createErrorPresenter, getFriendlyErrorMessage } from "./error-handler.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -69,6 +69,39 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       setApiStatus(describeBackendError(err), true);
       return null;
+    }
+  }
+
+  function resolvePostLoginTarget(profile) {
+    const next = new URLSearchParams(window.location.search).get("next");
+    if (profile?.isAdmin) {
+      return "/admin.html";
+    }
+    if (next && next.startsWith("/") && !next.startsWith("//") && !next.includes("/login.html")) {
+      return next;
+    }
+    return "/index.html";
+  }
+
+  async function redirectIfAlreadyLoggedIn() {
+    try {
+      const user = await ensureAuthReady();
+      if (!user) return;
+      const idToken = await user.getIdToken(true);
+      const profile = await fetchCurrentUser(idToken);
+      sessionStorage.setItem("idToken", idToken);
+      sessionStorage.setItem("uid", profile.uid || user.uid);
+      sessionStorage.setItem("email", profile.email || user.email || "");
+      sessionStorage.setItem("userEmail", profile.email || user.email || "");
+      sessionStorage.setItem("loggedInUser", profile.email || user.email || "");
+      sessionStorage.setItem("displayName", profile.name || user.displayName || fallbackNameFromEmail(profile.email || user.email));
+      sessionStorage.setItem("photoURL", user.photoURL || "");
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("role", profile.isAdmin ? "admin" : "customer");
+      sessionStorage.setItem("emailVerified", String(Boolean(profile.emailVerified)));
+      window.location.replace(resolvePostLoginTarget(profile));
+    } catch (_) {
+      // stay on login page if restoration/profile fetch fails
     }
   }
 
@@ -154,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sessionStorage.clear();
       return;
     }
-    window.location.replace(profile.isAdmin ? "admin.html" : "../index.html");
+    window.location.replace(resolvePostLoginTarget(profile));
   }
 
   async function googleSignIn() {
@@ -243,5 +276,6 @@ document.addEventListener("DOMContentLoaded", () => {
   testApiBaseBtn?.addEventListener("click", refreshBackendStatus);
 
   setRoleMode(false);
+  redirectIfAlreadyLoggedIn();
   refreshBackendStatus();
 });
