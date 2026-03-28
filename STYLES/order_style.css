@@ -1,102 +1,166 @@
-.order {
-    display: flex;
-    flex-direction: row;
-    gap: 40px;
-    flex-wrap: wrap;
+.order-page-section {
+  display: block;
 }
 
-/* Cart Section */
+.order-page-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 10px 0 22px;
+  padding: 24px 26px;
+  background: linear-gradient(135deg, rgba(17,17,17,.97), rgba(67,46,33,.92));
+  border-radius: 24px;
+  color: #fff;
+  box-shadow: 0 24px 45px rgba(17,17,17,.14);
+}
+
+.order-kicker {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.12);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.order-page-intro h2 {
+  margin-bottom: 8px;
+}
+
+.order-page-intro p {
+  max-width: 720px;
+  color: rgba(255,255,255,.8) !important;
+}
+
+.order-page-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.order-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 24px;
+  align-items: start;
+}
+
+.confirmed-orders {
+  background: #fff;
+  color: #111;
+  border-radius: 22px;
+  border: 1px solid rgba(17,17,17,.06);
+  box-shadow: 0 18px 34px rgba(17,17,17,.08);
+  padding: 22px;
+  width: 100%;
+  margin-top: 0 !important;
+}
+
+.confirmed-orders h4 {
+  color: #111 !important;
+}
+
 .cart {
-    width: 400px;
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(17,17,17,.06);
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 18px 34px rgba(17,17,17,.08);
+  position: sticky;
+  top: 108px;
 }
 
-/* Scrollable cart list */
+.cart h3 {
+  margin-bottom: 12px;
+}
+
 #cartList {
-    max-height: 250px; 
-    overflow-y: auto;
-    margin-top: 10px;
-    padding-right: 8px;
-    scrollbar-width: thin;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-bottom: 12px;
 }
 
 #cartList::-webkit-scrollbar {
-    width: 6px;
-}
-
-#cartList::-webkit-scrollbar-track {
-    background: rgb(46, 46, 46);
-    border-radius: 10px;
+  width: 6px;
 }
 
 #cartList::-webkit-scrollbar-thumb {
-    background-color: aliceblue;
-    border-radius: 10px;
+  background: rgba(17,17,17,.28);
+  border-radius: 999px;
 }
 
-#cartList::-webkit-scrollbar-thumb:hover {
-    background-color: #cfdfff;
+.cart-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(17,17,17,.08);
+  gap: 12px;
 }
 
-/* Order Total & Buttons */
-.order-total {
-    margin-top: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
-
-.confirmation-btn {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; 
+.cart-item:last-child {
+  border-bottom: 0;
 }
 
 .cart-summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+  margin: 12px 0 8px;
+  font-size: 1rem;
 }
 
-/* Confirmed Orders Section */
-.confirmed-orders {
-    background-color: #fff; /* or transparent if you prefer no box */
-    color: #000;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    width: 700px;
-    margin-top: 30px;
+.confirmation-btn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
-
-.confirmed-orders h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
+.checkout label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b6b6b;
+  margin-top: 12px;
 }
 
-/* Payment Requirements */
+.checkout input,
+.checkout select {
+  width: 100%;
+  border: 1px solid rgba(17,17,17,.12);
+  border-radius: 12px;
+  padding: 11px 12px;
+  margin-top: 6px;
+  background: #fff;
+}
+
 #paymentRequirements {
-    margin-top: 12px;
+  margin-top: 6px;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 900px) {
-    .order {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        gap: 20px;
-    }
+@media (max-width: 980px) {
+  .order-page-intro {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .cart,
-    .confirmed-orders {
-        width: 90%;
-    }
+  .order-container {
+    grid-template-columns: 1fr;
+  }
 
-    #cartList {
-        max-height: 200px;
-    }
+  .cart {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .order-page-intro,
+  .confirmed-orders,
+  .cart {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .confirmation-btn {
+    grid-template-columns: 1fr;
+  }
 }

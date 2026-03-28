@@ -30,6 +30,7 @@
       <a href="../index.html" class="nav-btn btn btn-sm btn-outline-dark">Home</a>
       <a href="menu.html" class="nav-btn btn btn-sm btn-outline-dark">Menu</a>
       <a href="order.html" class="nav-btn btn btn-sm btn-dark active">Order</a>
+      <a href="#cartPanel" class="nav-btn btn btn-sm btn-outline-dark cart-nav-btn" data-cart-link>Cart <span class="cart-link-badge" data-cart-count>0</span></a>
       <a href="reservation.html" class="nav-btn btn btn-sm btn-outline-dark">Reserve</a>
       <a href="gallery.html" class="nav-btn btn btn-sm btn-outline-dark">Gallery</a>
       <a href="about.html" class="nav-btn btn btn-sm btn-outline-dark">About</a>
@@ -53,8 +54,18 @@
 
   <!-- Main Content -->
   <main class="container">
-    <section class="order mt-4">
-      <h2>Your Order</h2>
+    <section class="order order-page-section mt-4">
+      <div class="order-page-intro">
+        <div>
+          <span class="order-kicker">Customer Checkout</span>
+          <h2>Your Order</h2>
+          <p class="text-muted mb-0">Review your cart, confirm your details, and manage recently placed orders in one professional customer dashboard.</p>
+        </div>
+        <div class="order-page-cta">
+          <a href="menu.html" class="btn btn-outline-dark">Add More Items</a>
+          <a href="#confirmedOrdersSection" class="btn btn-dark">My Orders</a>
+        </div>
+      </div>
 
       <div class="order-container">
         <!-- Confirmed Orders Screen -->
@@ -70,7 +81,7 @@
         </div>
 
         <!-- Cart Sidebar -->
-        <aside class="cart">
+        <aside id="cartPanel" class="cart">
           <h3>Your Cart</h3>
           <div id="cartList" class="cart-list" aria-live="polite"></div>
 
@@ -138,6 +149,7 @@
 
   <!-- External JS -->
   <script type="module" src="../JS/order.js"></script>
+  <script src="../JS/cart-nav.js"></script>
   <script type="module" src="../JS/logout.js"></script>
   <script type="module" src="../JS/profile.js"></script>
 </body>

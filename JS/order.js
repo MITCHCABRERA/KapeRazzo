@@ -47,6 +47,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }));
   }
 
+
+  function updateMethodUI() {
+    const isDelivery = (methodSelect?.value || "") === "Delivery";
+    const paymentRequirements = document.getElementById("paymentRequirements");
+    if (paymentRequirements) paymentRequirements.style.display = "block";
+    if (addressInput) {
+      addressInput.parentElement?.classList.toggle("required-delivery", isDelivery);
+      addressInput.placeholder = isDelivery ? "House no., street, barangay, city" : "Not required for pickup";
+    }
+  }
+
+  function hydrateCustomerDefaults() {
+    const displayName = sessionStorage.getItem("displayName") || "";
+    if (nameInput && !nameInput.value && displayName) nameInput.value = displayName;
+  }
+
   async function requireUid() {
     const user = await ensureAuthReady();
     const uid = user?.uid || sessionStorage.getItem("uid");
@@ -265,6 +281,10 @@ document.addEventListener("DOMContentLoaded", () => {
     cart = updatedCart;
     renderCart();
   });
+
+  methodSelect?.addEventListener("change", updateMethodUI);
+  hydrateCustomerDefaults();
+  updateMethodUI();
 
   renderCart();
   loadMyOrders();

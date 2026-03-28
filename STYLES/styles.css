@@ -243,3 +243,123 @@ textarea{min-height:80px}
   color:rgba(255,255,255,.75);
 }
 
+
+
+/* --- Customer cart enhancements --- */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  padding-right: 110px;
+}
+
+.nav-btn.cart-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline: 12px;
+  border-color: rgba(255,255,255,.24) !important;
+}
+
+.nav-btn.cart-nav-btn.has-items,
+.cart-hero-btn.has-items,
+.floating-cart-btn.has-items {
+  box-shadow: 0 12px 30px rgba(17,17,17,.18);
+}
+
+.cart-link-badge,
+.cart-pill {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  background: rgba(255,255,255,.14);
+  color: #fff;
+}
+
+.cart-link-badge.is-empty,
+.cart-pill.is-empty {
+  opacity: .85;
+}
+
+.hero-copy .hero-ctas,
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.cart-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(17,17,17,.12);
+  background: rgba(255,255,255,.96);
+  color: var(--text);
+}
+
+.customer-service-strip {
+  margin: 22px auto 0;
+  max-width: 1120px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.service-pill {
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(17,17,17,.08);
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: 0 12px 28px rgba(17,17,17,.08);
+}
+
+.service-pill strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.service-pill span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 1100px) {
+  .user-actions {
+    padding-right: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  #logoutBtn {
+    position: static;
+    transform: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .customer-service-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .user-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .nav-btn.cart-nav-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

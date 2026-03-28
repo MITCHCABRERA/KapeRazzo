@@ -32,6 +32,7 @@
       <a href="index.html" class="btn btn-sm btn-dark active">Home</a>
       <a href="HTML/menu.html" class="btn btn-sm btn-outline-dark">Menu</a>
       <a href="HTML/order.html" class="btn btn-sm btn-outline-dark">Order</a>
+      <a href="HTML/order.html#cartPanel" class="nav-btn btn btn-sm btn-outline-dark cart-nav-btn" data-cart-link>Cart <span class="cart-link-badge" data-cart-count>0</span></a>
       <a href="HTML/reservation.html" class="btn btn-sm btn-outline-dark">Reserve</a>
       <a href="HTML/gallery.html" class="btn btn-sm btn-outline-dark">Gallery</a>
       <a href="HTML/about.html" class="btn btn-sm btn-outline-dark">About</a>
@@ -62,9 +63,24 @@
           <h2>Welcome to KapeRazzo Coffee House</h2>
           <p class="lead">A cozy neighborhood coffee shop serving specialty coffee, teas, and freshly baked pastries. Order ahead or reserve a table.</p>
           <p class="hero-ctas">
-            <a class="btn primary" href="#" data-bs-toggle="modal" data-bs-target="#orderModal">Order Now</a>
+            <a class="btn primary" href="HTML/menu.html">Order Now</a>
+            <a class="btn cart-hero-btn" href="HTML/order.html#cartPanel" data-cart-link>View Cart <span class="cart-pill" data-cart-count>0</span></a>
             <a class="btn" href="#" data-bs-toggle="modal" data-bs-target="#reserveModal">Reserve a Table</a>
           </p>
+          <div class="customer-service-strip">
+            <div class="service-pill">
+              <strong>Fast customer ordering</strong>
+              <span>Browse the menu, add favorites, then confirm pickup or delivery in one flow.</span>
+            </div>
+            <div class="service-pill">
+              <strong>Live cart tracking</strong>
+              <span>Your cart count stays visible while you explore the site.</span>
+            </div>
+            <div class="service-pill">
+              <strong>Reservations ready</strong>
+              <span>Secure a table in advance and keep your coffee plans organized.</span>
+            </div>
+          </div>
         </div>
         <div class="hero-media" aria-hidden="true">
           <img src="PICTURES/HERO/HERO BACKGROUND 1.png" alt="Latte and pastry on wooden table">
@@ -187,6 +203,7 @@
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="JS/cart-nav.js"></script>
 <script type="module" src="JS/logout.js"></script>
 <script src="JS/profile.js"></script>
 </body>
