@@ -39,6 +39,14 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
 
+  function notifyCartUpdated() {
+    window.dispatchEvent(new CustomEvent("kaperazzo:cart-updated", {
+      detail: {
+        cart: cart.map((item) => ({ ...item }))
+      }
+    }));
+  }
+
   async function requireUid() {
     const user = await ensureAuthReady();
     const uid = user?.uid || sessionStorage.getItem("uid");
@@ -55,9 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
       orders = await fetchJSON("/api/orders/my");
       renderOrders();
     } catch (err) {
-      if (String(err.message || "").includes("verify your email")) {
-        showMessage(`<div class="alert alert-warning">${escapeHtml(err.message)}</div>`);
-      }
+      orders = [];
+      renderOrders();
+      showMessage(`<div class="alert alert-warning">${escapeHtml(getFriendlyErrorMessage(err, "Failed to load your orders."))}</div>`);
     }
   }
 
@@ -124,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cart.length === 0) {
       cartList.innerHTML = "<p>Your cart is empty.</p>";
       cartTotal.textContent = "₱0.00";
+      saveCart();
       return;
     }
 
@@ -152,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!Number.isInteger(index)) return;
     cart.splice(index, 1);
     renderCart();
+    notifyCartUpdated();
   });
 
   ordersContainer?.addEventListener("click", async (evt) => {
@@ -173,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cart = [];
     saveCart();
     renderCart();
+    notifyCartUpdated();
     showMessage('<div class="alert alert-secondary">Cart cleared.</div>');
   });
 
@@ -229,6 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
       cart = [];
       saveCart();
       renderCart();
+      notifyCartUpdated();
       nameInput.value = "";
       phoneInput.value = "";
       accountInput.value = "";
@@ -237,8 +249,21 @@ document.addEventListener("DOMContentLoaded", () => {
       await loadMyOrders();
       showMessage(`<div class="alert alert-success">Order placed successfully. ID: <strong>${escapeHtml(saved._id)}</strong></div>`);
     } catch (err) {
-      showMessage(`<div class="alert alert-danger">${escapeHtml(getFriendlyErrorMessage(err, "Failed to place order")}</div>`);
+      showMessage(`<div class="alert alert-danger">${escapeHtml(getFriendlyErrorMessage(err, "Failed to place order"))}</div>`);
     }
+  });
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== "cart") return;
+    cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    renderCart();
+  });
+
+  window.addEventListener("kaperazzo:cart-updated", (event) => {
+    const updatedCart = event.detail?.cart;
+    if (!Array.isArray(updatedCart)) return;
+    cart = updatedCart;
+    renderCart();
   });
 
   renderCart();

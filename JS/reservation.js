@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `).join("");
     } catch (err) {
-      listWrap.innerHTML = `<div class="alert alert-warning">${escapeHtml(getFriendlyErrorMessage(err, "Failed to load reservations")}</div>`;
+      listWrap.innerHTML = `<div class="alert alert-warning">${escapeHtml(getFriendlyErrorMessage(err, "Failed to load reservations"))}</div>`;
     }
   }
 
@@ -117,9 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
       showMessage(`Reservation saved. ID: <strong>${escapeHtml(saved._id)}</strong>`, "success");
       resForm.reset();
       setMinDate();
-      loadMyReservations();
+      updateTimeOptions();
+      await loadMyReservations();
     } catch (err) {
-      showMessage(escapeHtml(getFriendlyErrorMessage(err, "Failed to save reservation"), "danger");
+      showMessage(escapeHtml(getFriendlyErrorMessage(err, "Failed to save reservation")), "danger");
     }
   });
 
@@ -134,9 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ status: "cancelled" })
       });
       showMessage("Reservation cancelled.", "info");
-      loadMyReservations();
+      await loadMyReservations();
     } catch (err) {
-      showMessage(escapeHtml(getFriendlyErrorMessage(err, "Failed to cancel reservation"), "danger");
+      showMessage(escapeHtml(getFriendlyErrorMessage(err, "Failed to cancel reservation")), "danger");
     }
   });
 

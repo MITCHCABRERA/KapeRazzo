@@ -10,6 +10,15 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => popup.classList.remove("show"), 2000);
   }
 
+  function persistCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.dispatchEvent(new CustomEvent("kaperazzo:cart-updated", {
+      detail: {
+        cart: cart.map((item) => ({ ...item }))
+      }
+    }));
+  }
+
   // Menu Data
   const menuData = [
     {
@@ -159,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
       cart.push({ name, price, quantity: 1 });
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
+    persistCart(cart);
     showPopup(`${name} added to cart ✅`);
 
     const modal = bootstrap.Modal.getInstance(coffeeModal);
@@ -183,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const existing = cart.find(i => i.name === itemName);
       if (existing) existing.quantity += 1; else cart.push({ name: itemName, price, quantity: 1 });
-      localStorage.setItem('cart', JSON.stringify(cart));
+      persistCart(cart);
       showPopup(`${itemName} added to cart ✅`);
     } catch (err) {
       console.error('Add to cart failed', err);
