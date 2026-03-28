@@ -173,6 +173,21 @@ async function probeApiBase(base, timeoutMs = 1800) {
 }
 
 async function discoverApiBase(force = false) {
+  if (!force) {
+    const cachedBase = normalizeBase(
+      sessionStorage.getItem(API_BASE_ACTIVE_KEY)
+      || localStorage.getItem(API_BASE_STORAGE_KEY)
+      || API_BASE
+      || getDefaultApiBase()
+    );
+
+    if (cachedBase) {
+      API_BASE = cachedBase;
+      sessionStorage.setItem(API_BASE_ACTIVE_KEY, cachedBase);
+      return cachedBase;
+    }
+  }
+
   if (!force && discoveryPromise) return discoveryPromise;
 
   const attempt = (async () => {

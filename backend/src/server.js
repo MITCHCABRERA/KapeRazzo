@@ -34,9 +34,9 @@ app.use(helmet({
 }));
 app.use(compression());
 
-const limiter = rateLimit({
+const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: Number(process.env.API_RATE_LIMIT_MAX || 300),
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res, next, options) => {
@@ -44,14 +44,15 @@ const limiter = rateLimit({
   },
   message: "Too many requests, please try again later."
 });
-app.use(limiter);
-
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: Number(process.env.AUTH_RATE_LIMIT_MAX || 20),
+  max: Number(process.env.AUTH_RATE_LIMIT_MAX || 120),
   standardHeaders: true,
   legacyHeaders: false,
-  message: "Too many authentication attempts, please try again later."
+  handler: (req, res, next, options) => {
+    next(new AppError(options.message, options.statusCode, "RATE_LIMITED"));
+  },
+  message: "Too many authentication requests, please try again later."
 });
 
 const allowedOrigins = (process.env.CORS_ORIGINS || "")
@@ -115,6 +116,7 @@ app.get("/api/health", (req, res) => {
   res.json({ ok: true, service: "KapeRazzo API", environment: process.env.NODE_ENV || "development", db });
 });
 
+app.use("/api", apiLimiter);
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);

@@ -363,3 +363,212 @@ textarea{min-height:80px}
     justify-content: center;
   }
 }
+
+
+/* --- Header polish + donut user menu --- */
+.site-header .main-nav .btn,
+.site-header .main-nav .nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(255,255,255,.05);
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.site-header .main-nav .btn:hover,
+.site-header .main-nav .nav-btn:hover,
+.site-header .main-nav .btn:focus-visible,
+.site-header .main-nav .nav-btn:focus-visible {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.28) !important;
+  color: #ffffff !important;
+}
+
+.site-header .main-nav .btn.active,
+.site-header .main-nav .nav-btn.active,
+.site-header .main-nav .btn.btn-dark,
+.site-header .main-nav .nav-btn.btn-dark {
+  background: #ffffff;
+  border-color: #ffffff !important;
+  color: #111111 !important;
+}
+
+.site-header .main-nav .cart-nav-btn {
+  background: rgba(255,255,255,.08);
+}
+
+.site-header .main-nav .cart-nav-btn.has-items {
+  background: linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.08));
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  position: relative;
+  padding-right: 0;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-donut-btn,
+.user-donut-btn.btn {
+  width: 54px;
+  height: 54px;
+  padding: 4px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  box-shadow: 0 12px 28px rgba(0,0,0,.18);
+}
+
+.user-donut-btn:hover,
+.user-donut-btn:focus-visible {
+  border-color: rgba(255,255,255,.35);
+  background: rgba(255,255,255,.14);
+}
+
+.user-donut-btn::after {
+  display: none;
+}
+
+.user-photo--button,
+.user-donut-btn img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #ffffff;
+}
+
+.user-donut-menu {
+  min-width: 310px;
+  padding: 0;
+  border: none;
+  border-radius: 22px;
+  overflow: hidden;
+  margin-top: 14px;
+  box-shadow: 0 28px 60px rgba(0,0,0,.22);
+}
+
+.user-donut-card {
+  padding: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f7f8 100%);
+}
+
+.user-donut-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.user-donut-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f2f4f7;
+  border: 3px solid #ffffff;
+  box-shadow: 0 10px 24px rgba(17,24,39,.12);
+}
+
+.user-donut-copy {
+  min-width: 0;
+}
+
+.user-donut-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.25;
+}
+
+.user-donut-email {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.user-donut-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.user-donut-actions .btn {
+  min-height: 42px;
+  border-radius: 14px;
+  font-weight: 600;
+}
+
+.user-donut-menu #logoutBtn {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  transform: none !important;
+  color: #ffffff;
+  border-color: #111827;
+  background: #111827;
+}
+
+.user-donut-menu #logoutBtn:hover {
+  color: #ffffff;
+  border-color: #dc3545;
+  background: #dc3545;
+}
+
+.is-guest-user {
+  opacity: .8;
+}
+
+@media (max-width: 1100px) {
+  .site-header .header-inner {
+    gap: 14px;
+  }
+
+  .site-header .main-nav {
+    width: 100%;
+    justify-content: flex-start !important;
+  }
+
+  .user-actions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header .main-nav {
+    width: 100%;
+    justify-content: center !important;
+  }
+
+  .user-actions {
+    width: auto;
+    margin-left: auto;
+  }
+
+  .user-donut-btn,
+  .user-donut-btn.btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .user-donut-menu {
+    min-width: min(92vw, 310px);
+  }
+}

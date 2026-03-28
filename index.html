@@ -38,20 +38,27 @@
       <a href="HTML/about.html" class="btn btn-sm btn-outline-dark">About</a>
     </nav>
           <div class="user-actions">
-    <div id="userProfile" class="user-profile">
-      <img id="userPhoto" class="user-photo" src="" alt="Profile" />
-      <div class="user-meta">
-        <div id="userName" class="user-name">User</div>
-        <div id="userEmail" class="user-email">email@email.com</div>
+      <div class="dropdown user-menu">
+        <button class="btn user-donut-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Open account menu">
+          <img class="user-photo user-photo--button" src="" alt="Profile" data-user-photo />
+        </button>
+        <div class="dropdown-menu dropdown-menu-end user-donut-menu">
+          <div class="user-donut-card">
+            <div class="user-donut-profile">
+              <img class="user-donut-avatar" src="" alt="Profile" data-user-photo />
+              <div class="user-donut-copy">
+                <div class="user-donut-name" data-user-name>User</div>
+                <div class="user-donut-email" data-user-email>email@email.com</div>
+              </div>
+            </div>
+            <div class="user-donut-actions">
+              <a class="btn btn-outline-dark btn-sm w-100" href="HTML/profile.html">My Profile</a>
+              <button id="logoutBtn" data-logout class="btn btn-dark btn-sm w-100" type="button">Logout</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <button id="logoutBtn" class="btn btn-sm btn-outline-light">
-      Logout
-    </button>
-  </div>
-
-
     </div>
   </header>
 

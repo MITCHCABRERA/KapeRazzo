@@ -7,18 +7,24 @@ function clearClientSession() {
   sessionStorage.removeItem("KAPERAZZO_API_BASE_ACTIVE");
 }
 
+async function handleLogout(event) {
+  event?.preventDefault?.();
+
+  try {
+    await signOut(auth).catch(() => {});
+  } catch (err) {
+    console.warn("Firebase sign out skipped:", err);
+  }
+
+  clearClientSession();
+  window.location.replace("/login.html");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("logoutBtn");
-  if (!btn) return;
+  const buttons = Array.from(document.querySelectorAll('[data-logout], #logoutBtn'));
+  if (!buttons.length) return;
 
-  btn.addEventListener("click", async () => {
-    try {
-      await signOut(auth).catch(() => {});
-    } catch (err) {
-      console.warn("Firebase sign out skipped:", err);
-    }
-
-    clearClientSession();
-    window.location.replace("/login.html");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", handleLogout);
   });
 });
